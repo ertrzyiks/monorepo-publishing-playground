@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@github.com/ertrzyiks/monorepo-publishing-playground.git",
+    "url": "git+ssh://git@github.com/ertrzyiks/monorepo-publishing-playground.git",
     "directory": "packages/test-b"
   }
 }
