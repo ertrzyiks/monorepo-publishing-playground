@@ -25,7 +25,7 @@ jobs:
         run: yarn
 
       - name: Snapshot
-        run: yarn changeset version --snapshot
+        run: yarn changeset version --snapshot $GITHUB_SHA
 
       - name: Collect all the packages
         id: package_list
@@ -33,7 +33,7 @@ jobs:
           echo 'LIST<<EOF' >> $GITHUB_OUTPUT
           bash list.sh | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
-          echo 'NUMBER_OF_PACKAGES=`git ls-files --modified | grep package.json | wc -l`' >> $GITHUB_OUTPUT
+          echo 'NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)' >> $GITHUB_OUTPUT
 
       - name: Publish
         run: yarn changeset publish --tag alpha --no-git-tag --snapshot
