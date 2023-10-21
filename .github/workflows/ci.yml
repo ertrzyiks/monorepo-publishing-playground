@@ -31,8 +31,9 @@ jobs:
         id: package_list
         run: |
           echo 'LIST<<EOF' >> $GITHUB_OUTPUT
-          bash list.sh >> $GITHUB_OUTPUT
+          bash list.sh | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
+          echo 'NUMBER_OF_PACKAGES=`git ls-files --modified | grep package.json | wc -l`' >> $GITHUB_OUTPUT
 
       - name: Publish
         run: yarn changeset publish --tag alpha --no-git-tag --snapshot
@@ -49,6 +50,7 @@ jobs:
 
       - name: Update comment
         uses: peter-evans/create-or-update-comment@v3
+        if: steps.package_list.outputs.NUMBER_OF_PACKAGES != '0'
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-id: ${{ steps.fc.outputs.comment-id }}
@@ -59,5 +61,14 @@ jobs:
             ```
             ${{ steps.package_list.outputs.LIST }}
             ```
+      - name: Update comment
+        uses: peter-evans/create-or-update-comment@v3
+        if: steps.package_list.outputs.NUMBER_OF_PACKAGES == '0'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          edit-mode: replace
+          body: |
+            Published packages: none
 
 
