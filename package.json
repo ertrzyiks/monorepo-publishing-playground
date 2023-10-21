@@ -7,6 +7,9 @@
   ],
   "repository": "git@github.com:ertrzyiks/monorepo-publishing-playground.git",
   "author": "ertrzyiks <mateusz.derks@gmail.com>",
+  "scripts": {
+    "release": "changesets publish"
+  },
   "license": "MIT",
   "dependencies": {
     "@changesets/cli": "^2.26.2"

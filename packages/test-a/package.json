@@ -1,7 +1,12 @@
 {
   "name": "@ertrzyiks/test-a",
   "version": "1.0.0",
-  "scripts": {
-    "release": "pwd"
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@github.com/ertrzyiks/monorepo-publishing-playground.git",
+    "directory": "packages/test-a"
   }
 }
