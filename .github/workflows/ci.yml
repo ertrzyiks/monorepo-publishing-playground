@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: write
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Snapshot
+        run: yarn changeset version --snapshot $GITHUB_SHA
+
+      - name: Collect all the packages
+        id: package_list
+        run: |
+          echo 'LIST<<EOF' >> $GITHUB_OUTPUT
+          bash list.sh | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+          echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Publish
+        run: yarn changeset publish --tag alpha --no-git-tag --snapshot
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: steps.package_list.outputs.NUMBER_OF_PACKAGES != '0'
+        with:
+          hide_and_recreate: true
+          hide_classify: "OUTDATED"
+          message: |
+            Published packages
+
+            ```
+            ${{ steps.package_list.outputs.LIST }}
+            ```
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: steps.package_list.outputs.NUMBER_OF_PACKAGES == '0'
+        with:
+          hide: true
+          hide_classify: "OUTDATED"
+
+
