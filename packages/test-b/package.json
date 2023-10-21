@@ -1,0 +1,7 @@
+{
+  "name": "@ertrzyiks/test-b",
+  "version": "1.0.0",
+  "dependencies": {
+    "@ertrzyiks/test-a": "1.0.0"
+  }
+}

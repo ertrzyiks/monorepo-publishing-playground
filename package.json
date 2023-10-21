@@ -1,0 +1,14 @@
+{
+  "name": "monorepo-publishing-playground",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "packages/*"
+  ],
+  "repository": "git@github.com:ertrzyiks/monorepo-publishing-playground.git",
+  "author": "ertrzyiks <mateusz.derks@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@changesets/cli": "^2.26.2"
+  }
+}
