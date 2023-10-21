@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Snapshot
+        run: yarn changeset version --snapshot
+
+      - name: Publish
+        run: yarn changeset publish --tag alpha --no-git-tag --snapshot
+
+
