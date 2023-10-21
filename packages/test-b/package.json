@@ -3,5 +3,8 @@
   "version": "1.0.0",
   "dependencies": {
     "@ertrzyiks/test-a": "1.0.0"
+  },
+  "scripts": {
+    "release": "pwd"
   }
 }
