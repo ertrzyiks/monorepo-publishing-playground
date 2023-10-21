@@ -51,12 +51,11 @@ jobs:
             ```
             ${{ steps.package_list.outputs.LIST }}
             ```
+
       - uses: marocchino/sticky-pull-request-comment@v2
         if: steps.package_list.outputs.NUMBER_OF_PACKAGES == '0'
         with:
           hide_and_recreate: true
           hide_classify: "OUTDATED"
-          message: |
-            No packages to publish
 
 
