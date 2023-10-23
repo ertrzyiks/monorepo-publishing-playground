@@ -1,0 +1,16 @@
+{
+  "name": "@ertrzyiks/test-c",
+  "private": true,
+  "version": "1.1.0",
+  "dependencies": {
+    "@ertrzyiks/test-a": "1.1.0"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/ertrzyiks/monorepo-publishing-playground.git",
+    "directory": "packages/test-b"
+  }
+}
