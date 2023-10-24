@@ -1,5 +1,12 @@
 # @ertrzyiks/test-b
 
+## 1.1.2
+
+### Patch Changes
+
+- Updated dependencies [6727020]
+  - @ertrzyiks/test-a@1.2.0
+
 ## 1.1.0
 
 ### Minor Changes
