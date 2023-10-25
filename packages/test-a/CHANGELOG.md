@@ -1,5 +1,11 @@
 # @ertrzyiks/test-a
 
+## 1.3.1
+
+### Patch Changes
+
+- 3aa0477: just a test
+
 ## 1.3.0
 
 ### Minor Changes
