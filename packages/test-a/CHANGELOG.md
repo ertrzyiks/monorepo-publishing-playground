@@ -1,5 +1,15 @@
 # @ertrzyiks/test-a
 
+## 1.3.0
+
+### Minor Changes
+
+- c93dfa4: test
+
+### Patch Changes
+
+- 4772911: asd
+
 ## 1.2.0
 
 ### Minor Changes
