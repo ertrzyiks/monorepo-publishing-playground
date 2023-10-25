@@ -35,10 +35,6 @@ jobs:
           echo 'EOF' >> $GITHUB_OUTPUT
           echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
 
-      - name: Publish
-        run: yarn changeset publish --tag alpha --no-git-tag --snapshot
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: marocchino/sticky-pull-request-comment@v2
         if: steps.package_list.outputs.NUMBER_OF_PACKAGES != '0'
