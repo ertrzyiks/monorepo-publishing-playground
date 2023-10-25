@@ -30,7 +30,9 @@ jobs:
         run: yarn
 
       - name: Snapshot
-        run: yarn changeset version --snapshot $GITHUB_SHA
+        run: yarn changeset version --snapshot $REF
+        env:
+          REF: ${{ inputs.ref }}
 
       - name: Collect all the packages
         id: package_list
