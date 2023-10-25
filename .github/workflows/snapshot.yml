@@ -8,12 +8,23 @@ on:
         required: false
         default: ''
 
+  workflow_call:
+    inputs:
+      ref:
+        type: string
+        required: false
+        default: ''
+
 jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
     outputs:
       publishedPackages: ${{ steps.package_list.outputs.LIST }}
+      numberOfPackages: ${{ steps.package_list.outputs.NUMBER_OF_PACKAGES }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
