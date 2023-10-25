@@ -1,0 +1,54 @@
+name: Release snapshot
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        type: string
+        required: false
+        default: ''
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    outputs:
+      publishedPackages: ${{ steps.package_list.outputs.LIST }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Setup Node.js 18.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.x
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install Dependencies
+        run: yarn
+
+      - name: Snapshot
+        run: yarn changeset version --snapshot $GITHUB_SHA
+
+      - name: Collect all the packages
+        id: package_list
+        run: |
+          echo 'LIST<<EOF' >> $GITHUB_OUTPUT
+          bash list.sh | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+          echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
+
+      - name: Publish the snapshot
+        run: |
+          yarn changeset publish --tag alpha --no-git-tag --snapshot
+
+      - name: Output
+        run: |
+          echo $LIST >> $GITHUB_SUMMARY
+        env:
+          LIST: ${{ steps.package_list.outputs.LIST }}
+
+
+
