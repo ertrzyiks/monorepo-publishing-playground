@@ -8,6 +8,7 @@ jobs:
 
   snapshot:
     uses: ./.github/workflows/snapshot.yml
+    if: github.event.pull_request.title != 'Version Packages'
     permissions:
       contents: write
       packages: write
@@ -21,6 +22,15 @@ jobs:
       contents: read
       pull-requests: write
     steps:
+      - name: 'Format package list'
+        id: format
+        run: |
+          echo 'packagesList<<EOF' >> $GITHUB_OUTPUT
+          echo $PUBLISHED_PACKAGES | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+        env:
+          PUBLISHED_PACKAGES: ${{ needs.snapshot.outputs.publishedPackages }}
+
       - uses: marocchino/sticky-pull-request-comment@v2
         if: needs.snapshot.outputs.numberOfPackages != '0'
         with:
@@ -30,7 +40,7 @@ jobs:
             Published packages
 
             ```
-            ${{ needs.snapshot.outputs.publishedPackages }}
+            ${{ steps.format.outputs.packagesList }}
             ```
 
       - uses: marocchino/sticky-pull-request-comment@v2

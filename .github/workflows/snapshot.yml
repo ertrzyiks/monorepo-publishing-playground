@@ -64,7 +64,7 @@ jobs:
           }
 
           echo 'LIST<<EOF' >> $GITHUB_OUTPUT
-          listChangedPackages | grep $SHA | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          listChangedPackages | grep $SHA >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
         env:
