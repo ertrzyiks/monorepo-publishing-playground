@@ -56,7 +56,7 @@ jobs:
 
       - name: Output
         run: |
-          echo $LIST >> $GITHUB_SUMMARY
+          echo $LIST >> $GITHUB_STEP_SUMMARY
         env:
           LIST: ${{ steps.package_list.outputs.LIST }}
 
