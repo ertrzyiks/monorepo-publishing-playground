@@ -35,8 +35,14 @@ jobs:
       - name: Collect all the packages
         id: package_list
         run: |
+          listChangedPackages () {
+            for filename in `git ls-files --modified | grep package.json`; do
+              cat "$filename" | jq -r '.name + "@" + .version'
+            done
+          }
+
           echo 'LIST<<EOF' >> $GITHUB_OUTPUT
-          bash list.sh | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          listChangedPackages | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
           echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
 
