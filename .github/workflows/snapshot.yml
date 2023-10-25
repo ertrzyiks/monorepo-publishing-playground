@@ -38,7 +38,7 @@ jobs:
 
       - name: Get SHA
         id: get_sha
-        run: echo "SHA::$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
+        run: echo "SHA=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
       - name: Setup Node.js 18.x
         uses: actions/setup-node@v3
