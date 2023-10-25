@@ -36,3 +36,19 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Comment on PR
+        id: summary
+        run: |
+          echo 'PAYLOAD<<EOF' >> $GITHUB_OUTPUT
+          node slack.js >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+
+        env:
+          PUBLISHED_PACKAGES: ${{ steps.changesets.outputs.publishedPackages }}
+
+      - name: Output
+        run: |
+          echo $PAYLOAD
+        env:
+          PAYLOAD: ${{ steps.summary.outputs.payload }}
