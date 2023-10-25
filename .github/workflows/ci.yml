@@ -26,7 +26,7 @@ jobs:
         id: format
         run: |
           echo 'packagesList<<EOF' >> $GITHUB_OUTPUT
-          echo $PUBLISHED_PACKAGES | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          echo "$PUBLISHED_PACKAGES" | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
           echo 'EOF' >> $GITHUB_OUTPUT
         env:
           PUBLISHED_PACKAGES: ${{ needs.snapshot.outputs.publishedPackages }}
