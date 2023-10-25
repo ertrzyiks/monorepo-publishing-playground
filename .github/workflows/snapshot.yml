@@ -49,6 +49,8 @@ jobs:
       - name: Publish the snapshot
         run: |
           yarn changeset publish --tag alpha --no-git-tag --snapshot
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Output
         run: |
