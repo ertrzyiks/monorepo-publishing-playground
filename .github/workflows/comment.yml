@@ -8,10 +8,6 @@ jobs:
   slash_command:
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
     steps:
       - name: Fetch issue info
         uses: octokit/request-action@v2.x
@@ -32,7 +28,7 @@ jobs:
       - name: Dispatch happo command
         uses: peter-evans/slash-command-dispatch@v3
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT }}
           issue-type: pull-request
           dispatch-type: workflow
           commands: |
