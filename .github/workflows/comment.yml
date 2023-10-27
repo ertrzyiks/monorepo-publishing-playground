@@ -8,6 +8,10 @@ jobs:
   slash_command:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
     steps:
       - name: Fetch issue info
         uses: octokit/request-action@v2.x
