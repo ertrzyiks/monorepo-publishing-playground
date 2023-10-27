@@ -1,0 +1,39 @@
+name: Slash Commands
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  slash_command:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Fetch issue info
+        uses: octokit/request-action@v2.x
+        id: fetch-issue
+        with:
+          route: GET ${{ github.event.issue.url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Fetch PR info
+        uses: octokit/request-action@v2.x
+        id: fetch-pr
+        with:
+          route: GET ${{ fromJson(steps.fetch-issue.outputs.data).pull_request.url }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Dispatch happo command
+        uses: peter-evans/slash-command-dispatch@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-type: pull-request
+          dispatch-type: workflow
+          commands: |
+            test
+          static-args: |
+            current-sha=${{ fromJson(steps.fetch-pr.outputs.data).head.sha }}
+            pr-number=${{ fromJson(steps.fetch-issue.outputs.data).number }}
+            comment-id=${{ github.event.comment.id }}

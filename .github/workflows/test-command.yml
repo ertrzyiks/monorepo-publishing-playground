@@ -1,0 +1,23 @@
+name: Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      current-sha:
+        description: 'Current SHA to run Happo against'
+        required: true
+      pr-number:
+        description: 'Pull request number to send status check'
+        required: false
+      comment-id:
+        description: 'The comment-id of the slash command'
+        required: false
+
+jobs:
+  test:
+    name: Just a test
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+
+    steps:
+      - run: echo "Hello world"
