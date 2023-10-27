@@ -62,16 +62,16 @@ jobs:
             done
           }
 
-          relevantPackages () {
-            listChangedPackages | grep $SHA
-          }
-
-          RELEVANT_PACKAGES=$(relevantPackages)
-
-          echo 'LIST<<EOF' >> $GITHUB_OUTPUT
-          [ -z "$RELEVANT_PACKAGES" ] && echo "" || echo "$RELEVANT_PACKAGES" >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
           echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
+
+          if [[ $VAR -gt 0 ]]; then
+            echo 'LIST<<EOF' >> $GITHUB_OUTPUT
+            listChangedPackages | grep $SHA >> $GITHUB_OUTPUT
+            echo 'EOF' >> $GITHUB_OUTPUT
+          else
+            echo "LIST=" >> $GITHUB_OUTPUT
+          fi
+
         env:
           SHA: ${{ steps.get_sha.outputs.SHA }}
 
