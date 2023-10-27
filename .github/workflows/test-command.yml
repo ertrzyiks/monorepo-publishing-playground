@@ -14,10 +14,44 @@ on:
         required: false
 
 jobs:
-  test:
+  snapshot:
     name: Just a test
+    uses: ./.github/workflows/snapshot.yml
+    with:
+      ref: ${{ inputs.current-sha }}
+  comment:
     runs-on: ubuntu-latest
-    timeout-minutes: 40
-
+    needs: [snapshot]
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
-      - run: echo "Hello world"
+      - name: 'Format package list'
+        id: format
+        run: |
+          echo 'packagesList<<EOF' >> $GITHUB_OUTPUT
+          echo "$PUBLISHED_PACKAGES" | awk '{print "yarn add " $0}' >> $GITHUB_OUTPUT
+          echo 'EOF' >> $GITHUB_OUTPUT
+        env:
+          PUBLISHED_PACKAGES: ${{ needs.snapshot.outputs.publishedPackages }}
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: needs.snapshot.outputs.numberOfPackages != '0'
+        with:
+          hide_and_recreate: true
+          hide_classify: "OUTDATED"
+          number: ${{ inputs.pr-number }}
+          message: |
+            Published packages
+
+            ```
+            ${{ steps.format.outputs.packagesList }}
+            ```
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        if: needs.snapshot.outputs.numberOfPackages == '0'
+        with:
+          hide: true
+          number: ${{ inputs.pr-number }}
+          hide_classify: "OUTDATED"
+
