@@ -17,13 +17,14 @@ jobs:
   snapshot:
     name: Just a test
     uses: ./.github/workflows/snapshot.yml
+    permissions:
+      contents: write
     with:
       ref: ${{ inputs.current-sha }}
   comment:
     runs-on: ubuntu-latest
     needs: [snapshot]
     permissions:
-      contents: write
       pull-requests: write
     steps:
       - name: 'Format package list'
