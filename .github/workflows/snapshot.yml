@@ -65,9 +65,13 @@ jobs:
 
           echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
 
-          echo 'LIST<<EOF' >> $GITHUB_OUTPUT
-          listChangedPackages | grep $SHA >> $GITHUB_OUTPUT
-          echo 'EOF' >> $GITHUB_OUTPUT
+          if [[ "$(git ls-files --modified | grep package.json | wc -l)" -eq "0" ]]; then
+            echo "LIST=" >> $GITHUB_OUTPUT
+          else
+            echo 'LIST<<EOF' >> $GITHUB_OUTPUT
+            listChangedPackages | grep $SHA >> $GITHUB_OUTPUT
+            echo 'EOF' >> $GITHUB_OUTPUT
+          fi
 
         env:
           SHA: ${{ steps.get_sha.outputs.SHA }}
