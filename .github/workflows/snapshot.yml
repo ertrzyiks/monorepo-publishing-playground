@@ -26,6 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
+      packages: write
     outputs:
       publishedPackages: ${{ steps.package_list.outputs.LIST }}
       numberOfPackages: ${{ steps.package_list.outputs.NUMBER_OF_PACKAGES }}

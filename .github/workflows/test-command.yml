@@ -19,6 +19,7 @@ jobs:
     uses: ./.github/workflows/snapshot.yml
     permissions:
       contents: write
+      packages: write
     with:
       ref: ${{ inputs.current-sha }}
   comment:
