@@ -29,7 +29,7 @@ jobs:
       packages: write
     outputs:
       publishedPackages: ${{ steps.package_list.outputs.LIST }}
-      numberOfPackages: ${{ steps.package_list.outputs.NUMBER_OF_PACKAGES }}
+      numberOfPackages: ${{ steps.packages_number.outputs.NUMBER_OF_PACKAGES }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -54,6 +54,11 @@ jobs:
         env:
           REF: ${{ steps.get_sha.outputs.SHA }}
 
+      - name: Collect the number of packages
+        id: packages_number
+        run: |
+          echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
+
       - name: Collect all the packages
         id: package_list
         run: |
@@ -63,9 +68,7 @@ jobs:
             done
           }
 
-          echo "NUMBER_OF_PACKAGES=$(git ls-files --modified | grep package.json | wc -l)" >> $GITHUB_OUTPUT
-
-          if [[ "$(git ls-files --modified | grep package.json | wc -l)" -eq "0" ]]; then
+          if [[ "$NUMBER_OF_PACKAGES" -eq "0" ]]; then
             echo "LIST=" >> $GITHUB_OUTPUT
           else
             echo 'LIST<<EOF' >> $GITHUB_OUTPUT
@@ -75,6 +78,7 @@ jobs:
 
         env:
           SHA: ${{ steps.get_sha.outputs.SHA }}
+          NUMBER_OF_PACKAGES: ${{ steps.packages_number.outputs.NUMBER_OF_PACKAGES }}
 
       - name: Publish the snapshot
         run: |
@@ -83,6 +87,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Output
+        if: steps.packages_number.outputs.NUMBER_OF_PACKAGES > 0
         run: |
           echo "$LIST" | awk '{print " - `" $0 "`"}' >> $GITHUB_STEP_SUMMARY
         env:
