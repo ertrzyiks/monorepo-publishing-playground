@@ -10,5 +10,8 @@
   "ignore": [
     "@ertrzyiks/test-c"
   ],
-  "privatePackages": false
+  "privatePackages": false,
+  "snapshot": {
+    "useCalculatedVersion": true
+  }
 }
