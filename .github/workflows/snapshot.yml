@@ -75,7 +75,6 @@ jobs:
             listChangedPackages | grep $SHA >> $GITHUB_OUTPUT
             echo 'EOF' >> $GITHUB_OUTPUT
           fi
-
         env:
           SHA: ${{ steps.get_sha.outputs.SHA }}
           NUMBER_OF_PACKAGES: ${{ steps.packages_number.outputs.NUMBER_OF_PACKAGES }}
