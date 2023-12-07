@@ -8,6 +8,6 @@ jobs:
   debug:
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${NAME}
+      - run: echo "${NAME}"
         env:
           NAME: ${{ github.repository }}
