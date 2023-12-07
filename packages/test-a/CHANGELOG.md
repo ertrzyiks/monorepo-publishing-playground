@@ -1,5 +1,11 @@
 # @ertrzyiks/test-a
 
+## 1.5.0
+
+### Minor Changes
+
+- 091f2fa: testng tes
+
 ## 1.4.0
 
 ### Minor Changes
